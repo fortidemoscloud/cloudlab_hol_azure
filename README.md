@@ -3,13 +3,13 @@
 This is a collection of deployments for Fortinet in Azure Cloud.
 
 ## List of modules
-- [basic_fgt-cluster-fgcp-xlb](./basic_fgt-cluster-fgcp-xlb)
+- [basic_fgt-ha-xlb-app-sec](./basic_fgt-ha-xlb-app-sec)
 
 ## Deployment considerations:
 - Follow the guide of each module.
 
 ## Use examples:
-Go to [Azure Terraform modules examples](https://github.com/jmvigueras/terraform-ftnt-modules-examples/Azure)
+Go to [Azure Terraform modules examples](https://github.com/jmvigueras/terraform-ftnt-modules-examples/tree/main/Azure)
 
 ## Requirements
 * [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) >= 1.5.0

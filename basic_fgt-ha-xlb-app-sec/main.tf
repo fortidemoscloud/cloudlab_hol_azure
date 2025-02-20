@@ -1,8 +1,15 @@
+# ----------------------------------------------------------------------------------------
+# Variables
+# ----------------------------------------------------------------------------------------
+variable "prefix" {
+  description = "Prefix to configured items in Azure"
+  type        = string
+  default     = "fgt-ha-xlb"
+}
 
 variable "custom_vars" {
   description = "Custom variables"
   type = object({
-    prefix         = optional(string, "fgt-ha-xlb")
     region         = optional(string, "spaincentral")
     fgt_version    = optional(string, "7.4.6")
     license_type   = optional(string, "payg")
@@ -25,7 +32,7 @@ module "fgt-ha-xlb" {
   source  = "jmvigueras/ftnt-azure-modules/azure//examples/basic_fgt-ha-xlb"
   version = "0.0.7"
 
-  prefix   = var.custom_vars["prefix"]
+  prefix   = var.prefix
   location = var.custom_vars["region"]
 
   admin_username = var.custom_vars["admin_username"]
@@ -46,7 +53,7 @@ module "k8s" {
   source  = "jmvigueras/ftnt-azure-modules/azure//modules/vm"
   version = "0.0.7"
 
-  prefix   = var.custom_vars["prefix"]
+  prefix   = var.prefix
   location = var.custom_vars["region"]
 
   resource_group_name = module.fgt-ha-xlb.resource_group_name
@@ -65,14 +72,14 @@ module "k8s" {
 
 locals {
   # K8S configuration and APP deployment
-  k8s_deployment = templatefile("./templates/k8s-dvwa-swagger.yaml", {
+  k8s_deployment = templatefile("./templates/k8s-dvwa-swagger.yaml.tp", {
     dvwa_nodeport    = "31000"
     swagger_nodeport = "31001"
     swagger_host     = module.fgt-ha-xlb.fgt_ips["fgt1"]["public"]
     swagger_url      = "http://${module.fgt-ha-xlb.fgt_ips["fgt1"]["public"]}:31001"
     }
   )
-  k8s_user_data = templatefile("./templates/k8s.sh", {
+  k8s_user_data = templatefile("./templates/k8s.sh.tp", {
     k8s_version    = var.custom_vars["k8s_version"]
     linux_user     = var.custom_vars["admin_username"]
     k8s_deployment = local.k8s_deployment
@@ -96,6 +103,9 @@ output "k8s" {
 # ----------------------------------------------------------------------------------------
 # Define variable subscription_id to use terraform.tfvars
 variable "subscription_id" {}
+variable "tenant_id" {}
+variable "client_secret" {}
+variable "client_id" {}
 
 provider "azurerm" {
   features {
@@ -104,6 +114,9 @@ provider "azurerm" {
     }
   }
   subscription_id = var.subscription_id
+  tenant_id       = var.tenant_id
+  client_id       = var.client_id
+  client_secret   = var.client_secret
 }
 
 # Prevent Terraform warning for backend config
