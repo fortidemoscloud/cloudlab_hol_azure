@@ -30,7 +30,7 @@ variable "custom_vars" {
 # ----------------------------------------------------------------------------------------
 module "fgt-ha-xlb" {
   source  = "jmvigueras/ftnt-azure-modules/azure//examples/basic_fgt-ha-xlb"
-  version = "0.0.7"
+  version = "0.0.8"
 
   prefix   = var.prefix
   location = var.custom_vars["region"]
@@ -51,7 +51,7 @@ module "fgt-ha-xlb" {
 # ----------------------------------------------------------------------------------------
 module "k8s" {
   source  = "jmvigueras/ftnt-azure-modules/azure//modules/vm"
-  version = "0.0.7"
+  version = "0.0.8"
 
   prefix   = var.prefix
   location = var.custom_vars["region"]
@@ -101,24 +101,6 @@ output "k8s" {
 # ----------------------------------------------------------------------------------------
 # Provider
 # ----------------------------------------------------------------------------------------
-# Define variable subscription_id to use terraform.tfvars
-variable "subscription_id" {}
-variable "tenant_id" {}
-variable "client_secret" {}
-variable "client_id" {}
-
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-  subscription_id = var.subscription_id
-  tenant_id       = var.tenant_id
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-}
-
 # Prevent Terraform warning for backend config
 terraform {
   backend "s3" {}
