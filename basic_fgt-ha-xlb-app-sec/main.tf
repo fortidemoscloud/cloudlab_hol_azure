@@ -101,6 +101,10 @@ output "k8s" {
 # ----------------------------------------------------------------------------------------
 # Provider
 # ----------------------------------------------------------------------------------------
+provider "azurerm" {
+  features {}
+}
+
 # Prevent Terraform warning for backend config
 terraform {
   backend "s3" {}
