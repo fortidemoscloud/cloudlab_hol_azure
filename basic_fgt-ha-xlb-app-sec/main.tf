@@ -30,7 +30,7 @@ variable "custom_vars" {
 # ----------------------------------------------------------------------------------------
 module "fgt-ha-xlb" {
   source  = "jmvigueras/ftnt-azure-modules/azure//examples/basic_fgt-ha-xlb"
-  version = "0.0.8"
+  version = "0.0.9"
 
   prefix   = var.prefix
   location = var.custom_vars["region"]
