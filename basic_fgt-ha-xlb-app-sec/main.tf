@@ -11,14 +11,14 @@ variable "custom_vars" {
   description = "Custom variables"
   type = object({
     region         = optional(string, "spaincentral")
-    fgt_version    = optional(string, "7.4.6")
+    fgt_version    = optional(string, "7.4.11")
     license_type   = optional(string, "payg")
     fgt_size       = optional(string, "Standard_F4s")
-    fgt_vnet_cidr  = optional(string, "172.10.0.0/23")
+    fgt_vnet_cidr  = optional(string, "172.16.0.0/23")
     admin_username = optional(string, "azureadmin")
     k8s_size       = optional(string, "Standard_B2ls_v2")
-    k8s_version    = optional(string, "1.31")
-    tags           = optional(map(string), { "Deploy" = "CloudLab AWS", "Project" = "CloudLab" })
+    k8s_version    = optional(string, "1.33")
+    tags           = optional(map(string), { "Project" = "CloudLab" })
   })
   default = {}
 }
@@ -101,12 +101,15 @@ output "k8s" {
 # ----------------------------------------------------------------------------------------
 # Provider
 # ----------------------------------------------------------------------------------------
+variable "subscription_id" {}
+
 provider "azurerm" {
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
   }
+  subscription_id = var.subscription_id
 }
 
 # Prevent Terraform warning for backend config
